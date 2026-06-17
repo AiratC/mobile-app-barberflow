@@ -7,5 +7,8 @@ export const baseApi = createApi({
       baseUrl: `${BACKEND_URL}/api`
    }
    ),
-   endpoints: () => ({}),
+   tagTypes: [
+      'User'
+   ],
+   endpoints: (builder) => ({}),
 })
