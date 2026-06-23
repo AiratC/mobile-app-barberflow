@@ -1,11 +1,58 @@
 import React, { useState } from 'react'
-import { ImageBackground, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, ImageBackground, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { styles } from './LoginScreen.styles'
 import { Ionicons } from '@expo/vector-icons';
+import { useLoginMutation } from '../../../store/services/authApi';
+import { setCredentials } from '../../../store/slices/authSlice';
+import { useAppDispatch } from '../../../store/store';
+import * as SecureStore from 'expo-secure-store';
+import Toast from 'react-native-toast-message';
 
 const LoginScreen = ({ navigation }: any) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const dispatch = useAppDispatch();
+
+  const [login, { isLoading: loginLoading, isError: loginError }] = useLoginMutation();
+
+  // Обработчик входа
+  const handleClickLogin = async () => {
+    if(!email?.trim() || !password?.trim()) {
+      Toast.show({
+        type: 'error',
+        text1: 'Ошибка валидации',
+        text2: 'Пожалуйста, заполните все поля',
+        position: 'top'
+      });
+      return;
+    }
+    
+
+    try {
+      const response = await login({ email, password }).unwrap();
+
+      // Сначала сохраняем токен в зашифрованное хранилище
+      await SecureStore.setItemAsync('user_token', response.token);
+      
+      dispatch(setCredentials({ token: response.token, user: response.user }));
+
+    } catch (error: any) {
+      console.log(`Error in login: `, error);
+
+      const errorMessage = error?.data?.message || 'Не удалось связаться с сервером';
+
+      Toast.show({
+        type: 'error',
+        text1: 'Ошибка авторизации',
+        text2: errorMessage,
+        position: 'top',
+        visibilityTime: 4000,
+        autoHide: true
+      });
+    }
+  }
 
   return (
     <>
@@ -26,6 +73,8 @@ const LoginScreen = ({ navigation }: any) => {
               placeholderTextColor={`#A0A0A0`}
               keyboardType='email-address'
               autoCapitalize='none'
+              value={email}
+              onChangeText={(text) => setEmail(text)}
             />
 
             {/* Ввод пароля */}
@@ -68,8 +117,16 @@ const LoginScreen = ({ navigation }: any) => {
           <TouchableOpacity
             style={styles.button}
             activeOpacity={0.7}
+            disabled={loginLoading}
+            onPress={handleClickLogin}
           >
-            <Text style={styles.buttonText}>Войти</Text>
+            <Text style={styles.buttonText}>
+              { loginLoading ? (
+                <ActivityIndicator color={`#FFFFFF`} size={'small'} />
+              ) : (
+                <Text>Войти</Text>
+              ) }
+            </Text>
           </TouchableOpacity>
 
           {/* Блок кнопки регистрации */}

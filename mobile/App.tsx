@@ -1,13 +1,12 @@
-import { NavigationContainer } from '@react-navigation/native';
-import AuthNavigator from './navigation/AuthNavigator';
-import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import MainAppContent from './screens/MainAppContent/MainAppContent';
+import Toast from 'react-native-toast-message';
 
 const App = () => {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <NavigationContainer>
-        <AuthNavigator />
-      </NavigationContainer>
+      <MainAppContent />
+      <Toast/>
     </GestureHandlerRootView>
   );
 }
