@@ -60,5 +60,26 @@ export const styles = StyleSheet.create({
       fontSize: 18,
       fontWeight: '600',
       textDecorationLine: 'underline'
+   },
+   passwordInputWrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      borderWidth: 1,
+      borderColor: 'rgba(255, 255, 255, 0.2)',
+      borderRadius: 7,
+      backgroundColor: 'rgba(255, 255, 255, 0.1)',
+      height: 52
+   },
+   passwordInput: {
+      flex: 1,
+      height: '100%',
+      paddingHorizontal: 16,
+      fontSize: 21,
+      color: '#FFFFFF'
+   },
+   eyeIcon: {
+      paddingHorizontal: 16,
+      justifyContent: 'center',
+      alignItems: 'center'
    }
 });

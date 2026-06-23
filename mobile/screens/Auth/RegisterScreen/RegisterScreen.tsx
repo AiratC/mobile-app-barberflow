@@ -1,8 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { ImageBackground, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { styles } from './RegisterScreen.styles'
+import { Ionicons } from '@expo/vector-icons';
 
 const RegisterScreen = () => {
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [password, setPassword] = useState('');
+
+
   return (
     <>
       <ImageBackground
@@ -34,13 +39,39 @@ const RegisterScreen = () => {
             />
 
             {/* Ввод пароля */}
-            <TextInput
-              style={styles.input}
-              placeholder='password'
-              placeholderTextColor={`#A0A0A0`}
-              secureTextEntry={true}
-              autoCapitalize='none'
-            />
+            <View style={styles.passwordInputWrapper}>
+              <TextInput
+                style={styles.passwordInput}
+                placeholder='Введите пароль'
+                placeholderTextColor={`#A0A0A0`}
+                secureTextEntry={!isPasswordVisible}
+                autoCapitalize='none'
+                value={password}
+                onChangeText={(text) => {
+                  setPassword(text);
+                  if (text.length === 0) {
+                    setIsPasswordVisible(false);
+                  }
+                }}
+              />
+
+              {/* Кнопка иконки глазика */}
+              {
+                password.length > 0 && (
+                  <TouchableOpacity
+                    style={styles.eyeIcon}
+                    onPress={() => setIsPasswordVisible(!isPasswordVisible)}
+                  >
+                    <Ionicons
+                      name={isPasswordVisible ? "eye-off-outline" : "eye-outline"}
+                      size={22}
+                      color={`#A0A0A0`}
+                    />
+                  </TouchableOpacity>
+                )
+              }
+            </View>
+
 
             {/* Кнопка регистрации */}
             <TouchableOpacity

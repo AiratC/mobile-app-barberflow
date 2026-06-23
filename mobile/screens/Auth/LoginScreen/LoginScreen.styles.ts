@@ -23,13 +23,11 @@ export const styles = StyleSheet.create({
    },
    input: {
       height: 52,
-      borderWidth: 1,
-      borderColor: `#E0E0E0`,
       borderRadius: 7,
       paddingHorizontal: 16,
       fontSize: 20,
-      color: '#1A1A1A',
-      backgroundColor: '#FAFAFA',
+      backgroundColor: 'rgba(255, 255, 255, 0.1)',
+      color: '#FFFFFF'
    },
    button: {
       height: 52,
@@ -59,6 +57,27 @@ export const styles = StyleSheet.create({
       fontSize: 15,
       fontWeight: 600,
       textDecorationLine: 'underline'
+   },
+   passwordInputWrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      borderWidth: 1,
+      borderColor: 'rgba(255, 255, 255, 0.2)',
+      borderRadius: 7,
+      backgroundColor: 'rgba(255, 255, 255, 0.1)',
+      height: 52
+   },
+   passwordInput: {
+      flex: 1,
+      height: '100%',
+      paddingHorizontal: 16,
+      fontSize: 21,
+      color: '#FFFFFF'
+   },
+   eyeIcon: {
+      paddingHorizontal: 16,
+      justifyContent: 'center',
+      alignItems: 'center',
    }
 });
 
