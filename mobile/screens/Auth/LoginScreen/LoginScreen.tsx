@@ -5,7 +5,8 @@ import { Ionicons } from '@expo/vector-icons';
 
 const LoginScreen = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-    const [password, setPassword] = useState('');
+  const [password, setPassword] = useState('');
+
   return (
     <>
       <ImageBackground
@@ -27,7 +28,6 @@ const LoginScreen = () => {
               autoCapitalize='none'
             />
 
-            {/* Ввод пароля */}
             {/* Ввод пароля */}
             <View style={styles.passwordInputWrapper}>
               <TextInput
