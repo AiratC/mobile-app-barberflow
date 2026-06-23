@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler'; // СТРОГО ПЕРВАЯ СТРОКА В ФАЙЛЕ!
 import { registerRootComponent } from 'expo';
 import App from './App';
 import { store } from './store/store';

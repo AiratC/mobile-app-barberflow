@@ -1,9 +1,14 @@
-import LoginScreen from './screens/Auth/LoginScreen/LoginScreen';
-import RegisterScreen from './screens/Auth/RegisterScreen/RegisterScreen';
+import { NavigationContainer } from '@react-navigation/native';
+import AuthNavigator from './navigation/AuthNavigator';
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
 const App = () => {
   return (
-    <LoginScreen/>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <NavigationContainer>
+        <AuthNavigator />
+      </NavigationContainer>
+    </GestureHandlerRootView>
   );
 }
 

@@ -3,7 +3,7 @@ import { ImageBackground, Text, TextInput, TouchableOpacity, View } from 'react-
 import { styles } from './RegisterScreen.styles'
 import { Ionicons } from '@expo/vector-icons';
 
-const RegisterScreen = () => {
+const RegisterScreen = ({ navigation }: any) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [password, setPassword] = useState('');
 
@@ -85,6 +85,7 @@ const RegisterScreen = () => {
             <View style={styles.loginContainer}>
               <Text style={styles.loginText}>Уже есть аккаунт?</Text>
               <TouchableOpacity
+              onPress={() => navigation.navigate('Login')}
               >
                 <Text style={styles.loginLink}>Войти</Text>
               </TouchableOpacity>
