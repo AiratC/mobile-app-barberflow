@@ -6,6 +6,7 @@ export const baseApi = createApi({
    reducerPath: 'api',
    baseQuery: fetchBaseQuery({
       baseUrl: `${BACKEND_URL}/api`,
+      timeout: 5000,
       /*
       Чтобы бэкенд понимал, кто делает запросы, токен нужно прикреплять 
       к каждому запросу в заголовок Authorization. RTK Query позволяет 

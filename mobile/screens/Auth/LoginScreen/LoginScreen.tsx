@@ -19,6 +19,7 @@ const LoginScreen = ({ navigation }: any) => {
 
   // Обработчик входа
   const handleClickLogin = async () => {
+
     if(!email?.trim() || !password?.trim()) {
       Toast.show({
         type: 'error',
@@ -33,9 +34,10 @@ const LoginScreen = ({ navigation }: any) => {
     try {
       const response = await login({ email, password }).unwrap();
 
-      // Сначала сохраняем токен в зашифрованное хранилище
+      // Сохраняем токен в зашифрованное хранилище устройства
       await SecureStore.setItemAsync('user_token', response.token);
       
+      // Отправляем данные в Redux
       dispatch(setCredentials({ token: response.token, user: response.user }));
 
     } catch (error: any) {

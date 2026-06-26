@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useAppDispatch } from '../../store/store'
 import { useSelector } from 'react-redux';
 import { RootState } from './../../store/store';
@@ -15,38 +15,45 @@ const MainAppContent = () => {
    const dispatch = useAppDispatch();
    const { isAuthenticated, isInitialLoading } = useSelector((state: RootState) => state.auth);
 
-   // Получаем функцию-триггер для безопасного запроса профиля с сервера
+   // Реф, чтобы гарантировать выполнение проверки строго ОДИН раз при старте приложения
+   const isCheckedRef = useRef(false);
+
    const [triggerGetProfile] = useLazyGetProfileQuery();
 
    useEffect(() => {
+      // Если проверка уже запущена или выполнена — игнорируем повторные вызовы useEffect
+      if (isCheckedRef.current) return;
+      isCheckedRef.current = true;
+
       const checkToken = async () => {
          try {
             const token = await SecureStore.getItemAsync('user_token');
 
             if (token) {
-               // 1. Временно даем токен для prepareHeaders
-               dispatch(setCredentials({ token: token, user: null }));
+               // Сначала временно прокидываем токен в стейт, чтобы RTK Query прикрепил его к заголовку Auth
+               dispatch(setCredentials({ token, user: null }));
 
-               // 2. Запрашиваем профиль
-               const response = await triggerGetProfile().unwrap();
+               // Делаем запрос профиля
+               const userResponse = await triggerGetProfile().unwrap();
 
-               // 3. Достаем объект пользователя из ответа бэкенда { user, success }
-               if (response?.success && response?.user) {
-                  dispatch(setCredentials({ token, user: response.user }));
-               } else {
-                  dispatch(logout());
-               }
+               // Сохраняем и токен, и полученного юзера
+               dispatch(setCredentials({ token, user: userResponse.user || userResponse }));
+
+            } else {
+               dispatch(logout());
             }
          } catch (error) {
+            console.error("❌ [CHECK_TOKEN] Критическая ошибка при проверке токена:", error);
             dispatch(logout());
+         } finally {
+            // Обязательно выключаем глобальный лоадер загрузки
+            dispatch(setInitializationChecked());
          }
       };
 
       checkToken();
-
    }, [dispatch, triggerGetProfile]);
 
-   // Пока приложение проверяет наличие токена в памяти устройства, показываем главный лоадер по центру экрана
    if (isInitialLoading) {
       return (
          <View style={styles.mainIndicatorContainer}>
@@ -57,18 +64,9 @@ const MainAppContent = () => {
 
    return (
       <NavigationContainer>
-         {/* Если авторизован — показываем основной навигатор (например, MainNavigator), иначе — AuthNavigator */}
-         {
-            isAuthenticated ? (
-               // Сюда позже добавим твой HomeScreen / MainNavigator
-               // Пока оставим AuthNavigator для тестов, либо создай заглушку
-               <MainNavigator />
-            ) : (
-               <AuthNavigator />
-            )
-         }
+         {isAuthenticated ? <MainNavigator /> : <AuthNavigator />}
       </NavigationContainer>
    )
 }
 
-export default MainAppContent
+export default MainAppContent;
