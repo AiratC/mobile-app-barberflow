@@ -5,6 +5,7 @@ import validateEmail from "../utils/validateEmail.ts";
 import { query } from "../config/db.ts";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { type AuthenticatedRequest } from "../types/isAuth.types.ts";
 
 // !!! Регистрация или восстановление
 export const registerController = async (req: IncomingMessage, res: ServerResponse) => {
@@ -220,3 +221,34 @@ export const logoutController = async (req: IncomingMessage, res: ServerResponse
       return sendJSON(res, { error: 'Server error' }, 500);
    }
 };
+
+// Делаем запрос актуального профиля
+export const getMe = async (req: AuthenticatedRequest, res: ServerResponse) => {
+   // Благодаря middleware, здесь мы 100% уверены, что req.user существует
+   const currentUser = req.user;
+
+   try {
+      const findUser = await query(
+         `
+            SELECT u.*, r.name as role_name FROM users u
+            JOIN roles r ON u.role_id = r.id
+            WHERE u.id = $1 AND is_deleted = false
+         `,
+         [currentUser?.userId]
+      );
+
+      // Получаю все данные пользователя кроме hash_password
+      const { password_hash, ...userData } = findUser.rows[0];
+
+      return sendJSON(res, { user: userData, success: true }, 200);
+   } catch (error) {
+      return sendJSON(
+         res,
+         {
+            success: false,
+            message: 'Server error'
+         },
+         500
+      )
+   }
+}

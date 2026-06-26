@@ -3,36 +3,46 @@ import { useAppDispatch } from '../../store/store'
 import { useSelector } from 'react-redux';
 import { RootState } from './../../store/store';
 import * as SecureStore from 'expo-secure-store';
-import { setCredentials, setInitializationChecked } from '../../store/slices/authSlice';
+import { logout, setCredentials, setInitializationChecked } from '../../store/slices/authSlice';
 import { ActivityIndicator, View } from 'react-native';
 import { styles } from './MainAppContent.styles';
 import { NavigationContainer } from '@react-navigation/native';
 import AuthNavigator from '../../navigation/AuthNavigator';
+import MainNavigator from '../../navigation/MainNavigator';
+import { useLazyGetProfileQuery } from '../../store/services/authApi';
 
 const MainAppContent = () => {
    const dispatch = useAppDispatch();
    const { isAuthenticated, isInitialLoading } = useSelector((state: RootState) => state.auth);
 
+   // Получаем функцию-триггер для безопасного запроса профиля с сервера
+   const [triggerGetProfile] = useLazyGetProfileQuery();
+
    useEffect(() => {
       const checkToken = async () => {
          try {
             const token = await SecureStore.getItemAsync('user_token');
-            
+
             if (token) {
-               // Здесь в идеале сделать легкий запрос на бэкенд /me для проверки валидности токена
-               // Для текущего шага просто восстанавливаем сессию:
+               // 1. Сначала временно прокидываем токен в стор, чтобы prepareHeaders в baseApi смог его подхватить
                dispatch(setCredentials({ token: token, user: null }));
+
+               // 2. Делаем запрос актуального профиля с бэкенда
+               const userProfile = await triggerGetProfile().unwrap();
+
+               // 3. Если бэкенд подтвердил профиль, сохраняем всё вместе
+               dispatch(setCredentials({ token, user: userProfile }));
             } else {
                dispatch(setInitializationChecked());
             }
          } catch (error) {
-            dispatch(setInitializationChecked());
+            dispatch(logout());
          }
       };
 
       checkToken();
 
-   }, [dispatch]);
+   }, [dispatch, triggerGetProfile]);
 
    // Пока приложение проверяет наличие токена в памяти устройства, показываем главный лоадер по центру экрана
    if (isInitialLoading) {
@@ -50,7 +60,7 @@ const MainAppContent = () => {
             isAuthenticated ? (
                // Сюда позже добавим твой HomeScreen / MainNavigator
                // Пока оставим AuthNavigator для тестов, либо создай заглушку
-               <AuthNavigator />
+               <MainNavigator />
             ) : (
                <AuthNavigator />
             )

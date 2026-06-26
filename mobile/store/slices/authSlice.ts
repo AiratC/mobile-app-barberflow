@@ -9,6 +9,7 @@ const initialState: AuthState = {
    isInitialLoading: true
 };
 
+
 const authSlice = createSlice({
    name: 'auth',
    initialState,
@@ -19,6 +20,8 @@ const authSlice = createSlice({
          state.user = action.payload.user;
          state.isAuthenticated = true;
          state.isInitialLoading = false;
+
+         console.log(state)
       },
       // Вызывается если токена нет или он протух
       setInitializationChecked: (state) => {
