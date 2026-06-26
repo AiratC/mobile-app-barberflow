@@ -34,16 +34,16 @@ export const styles = StyleSheet.create({
    },
    button: {
       height: 52,
-      backgroundColor: '#ffffff',
+      backgroundColor: '#1A1A1A',
       borderRadius: 7,
       justifyContent: 'center',
       alignItems: 'center',
-      marginTop: 8
+      marginTop: 12
    },
    buttonText: {
-      color: '#1A1A1A',
-      fontSize: 19,
-      fontWeight: 'bold'
+      color: '#FAFAFA',
+      fontSize: 16,
+      fontWeight: '600'
    },
    loginContainer: {
       flexDirection: 'row',

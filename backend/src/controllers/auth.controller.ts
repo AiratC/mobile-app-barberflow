@@ -101,8 +101,6 @@ export const registerController = async (req: IncomingMessage, res: ServerRespon
       }, 200);
 
    } catch (error) {
-      console.log(error);
-
       return sendJSON(res, { 
          success: false,
          message: 'Server error'
