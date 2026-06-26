@@ -237,6 +237,11 @@ export const getMe = async (req: AuthenticatedRequest, res: ServerResponse) => {
          [currentUser?.userId]
       );
 
+      // Проверяем, нашел ли SQL-запрос запись
+      if (findUser.rows.length === 0) {
+         return sendJSON(res, { success: false, message: 'Пользователь не найден' }, 404);
+      }
+
       // Получаю все данные пользователя кроме hash_password
       const { password_hash, ...userData } = findUser.rows[0];
 

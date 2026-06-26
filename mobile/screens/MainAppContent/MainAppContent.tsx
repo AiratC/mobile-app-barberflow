@@ -24,16 +24,18 @@ const MainAppContent = () => {
             const token = await SecureStore.getItemAsync('user_token');
 
             if (token) {
-               // 1. Сначала временно прокидываем токен в стор, чтобы prepareHeaders в baseApi смог его подхватить
+               // 1. Временно даем токен для prepareHeaders
                dispatch(setCredentials({ token: token, user: null }));
 
-               // 2. Делаем запрос актуального профиля с бэкенда
-               const userProfile = await triggerGetProfile().unwrap();
+               // 2. Запрашиваем профиль
+               const response = await triggerGetProfile().unwrap();
 
-               // 3. Если бэкенд подтвердил профиль, сохраняем всё вместе
-               dispatch(setCredentials({ token, user: userProfile }));
-            } else {
-               dispatch(setInitializationChecked());
+               // 3. Достаем объект пользователя из ответа бэкенда { user, success }
+               if (response?.success && response?.user) {
+                  dispatch(setCredentials({ token, user: response.user }));
+               } else {
+                  dispatch(logout());
+               }
             }
          } catch (error) {
             dispatch(logout());

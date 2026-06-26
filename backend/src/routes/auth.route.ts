@@ -13,6 +13,6 @@ export const authRouter = async (req: IncomingMessage, res: ServerResponse) => {
    } else if (method === 'POST' && url === '/api/auth/logout') {
       return await logoutController(req, res);
    } else if (method === 'GET' && url === '/api/auth/get-me') {
-      return await (await isAuth(getMe))(req, res);
+      return await isAuth(getMe)(req, res);
    }
 };

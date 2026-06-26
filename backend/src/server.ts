@@ -8,7 +8,6 @@ dotenv.config();
 const PORT = process.env.PORT || 5000;
 
 const server = http.createServer(async (req, res) => {
-
    // Подключаем роутер
    await router(req, res);
 
