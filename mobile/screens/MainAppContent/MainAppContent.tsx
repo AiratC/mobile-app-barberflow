@@ -8,8 +8,8 @@ import { ActivityIndicator, View } from 'react-native';
 import { styles } from './MainAppContent.styles';
 import { NavigationContainer } from '@react-navigation/native';
 import AuthNavigator from '../../navigation/AuthNavigator';
-import MainNavigator from '../../navigation/MainNavigator';
 import { useLazyGetProfileQuery } from '../../store/services/authApi';
+import MainTabNavigator from '../../navigation/MainTabNavigator';
 
 const MainAppContent = () => {
    const dispatch = useAppDispatch();
@@ -64,7 +64,7 @@ const MainAppContent = () => {
 
    return (
       <NavigationContainer>
-         {isAuthenticated ? <MainNavigator /> : <AuthNavigator />}
+         {isAuthenticated ? <MainTabNavigator/> : <AuthNavigator />}
       </NavigationContainer>
    )
 }
