@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from './../../store/store';
 import * as SecureStore from 'expo-secure-store';
 import { logout, setCredentials, setInitializationChecked } from '../../store/slices/authSlice';
-import { ActivityIndicator, View } from 'react-native';
+import { ActivityIndicator, StatusBar, View } from 'react-native';
 import { styles } from './MainAppContent.styles';
 import { NavigationContainer } from '@react-navigation/native';
 import AuthNavigator from '../../navigation/AuthNavigator';
@@ -64,6 +64,7 @@ const MainAppContent = () => {
 
    return (
       <NavigationContainer>
+         <StatusBar barStyle="light-content"/>
          {isAuthenticated ? <MainTabNavigator/> : <AuthNavigator />}
       </NavigationContainer>
    )

@@ -2,7 +2,7 @@ import React from 'react'
 import { RootState, useAppDispatch } from '../../store/store'
 import { useSelector } from 'react-redux';
 import { logout } from '../../store/slices/authSlice';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Platform, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 import { styles } from './HomeScreen.styles';
 
 const HomeScreen = () => {
@@ -10,14 +10,17 @@ const HomeScreen = () => {
    // Вытащим данные пользователя из стора, чтобы отобразить на экране
    const { user } = useSelector((state: RootState) => state.auth);
 
+   const statusBarHeight = Platform.OS === 'android' ? StatusBar.currentHeight : 0;
+
    const handleClickLogout = () => {
       // Наш экшен logout сам очистит Redux-стейт и сотрет токен из SecureStore
       dispatch(logout());
    };
 
    return (
-      <View style={styles.homeScreenContainer}>
-         <Text style={styles.title}>Добро пожаловать в BarberFlow!</Text>
+      <View style={[styles.homeScreenContainer, { paddingTop: statusBarHeight }]}>
+         <View style={styles.innerContainer}>
+            <Text style={styles.title}>Добро пожаловать в BarberFlow!</Text>
 
          {/* Отобразим email пользователя, если он прилетел с бэкенда */}
          <Text style={styles.subtitle}>
@@ -31,6 +34,7 @@ const HomeScreen = () => {
          >
             <Text style={styles.buttonText}>Выйти из аккаунта</Text>
          </TouchableOpacity>
+         </View>
       </View>
    )
 }

@@ -9,6 +9,7 @@ const Tab = createBottomTabNavigator();
 const MainTabNavigator = () => {
 
    const handleScreenOptions = ({ route }: { route: RouteProp<any, any> }) => ({
+      headerShown: false,
       tabBarIcon: ({ focused, color, size }: { focused: boolean, color: string, size: number }) => {
          let iconName: any;
          if (route.name === 'Home') {

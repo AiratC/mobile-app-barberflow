@@ -4,10 +4,10 @@ import Toast from 'react-native-toast-message';
 
 const App = () => {
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <MainAppContent />
-      <Toast/>
-    </GestureHandlerRootView>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <MainAppContent />
+        <Toast />
+      </GestureHandlerRootView>
   );
 }
 

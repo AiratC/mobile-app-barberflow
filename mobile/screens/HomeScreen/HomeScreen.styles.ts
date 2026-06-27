@@ -8,6 +8,12 @@ export const styles = StyleSheet.create({
       justifyContent: 'center',
       alignItems: 'center',
       padding: 20,
+      paddingTop: 0
+   },
+   innerContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center'
    },
    title: {
       fontSize: 24,
