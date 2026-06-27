@@ -9,17 +9,17 @@ const Tab = createBottomTabNavigator();
 const MainTabNavigator = () => {
 
    const handleScreenOptions = ({ route }: { route: RouteProp<any, any> }) => ({
-      tabBarIcon: ({ focused, color, size }) => {
+      tabBarIcon: ({ focused, color, size }: { focused: boolean, color: string, size: number }) => {
          let iconName: any;
          if (route.name === 'Home') {
             iconName = focused ? 'home' : 'home-outline';
-         } else if(route.name === 'Profile') {
+         } else if (route.name === 'Profile') {
             iconName = focused ? 'person' : 'person-outline'
-         } else if(route.name === 'Recordings') {
+         } else if (route.name === 'Recordings') {
             iconName = focused ? 'calendar' : 'calendar-outline'
          };
 
-         return <Ionicons name={iconName} size={size} color={color}/>
+         return <Ionicons name={iconName} size={size} color={color} />
       },
       tabBarActiveTintColor: '#FFC107',
       tabBarInactiveTintColor: 'gray'
