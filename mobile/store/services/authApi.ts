@@ -18,20 +18,11 @@ const authApi = baseApi.injectEndpoints({
             method: 'POST',
             body: credentials
          })
-      }),
-      // Получение профиля текущего пользователя
-      getProfile: builder.query<any, void>({
-         query: () => ({
-            url: `/auth/get-me`,
-            method: 'GET'
-         })
       })
    })
 });
 
 export const {
    useRegisterMutation,
-   useLoginMutation,
-   useGetProfileQuery,
-   useLazyGetProfileQuery
+   useLoginMutation
 } = authApi;

@@ -8,8 +8,8 @@ import { ActivityIndicator, StatusBar, View } from 'react-native';
 import { styles } from './MainAppContent.styles';
 import { NavigationContainer } from '@react-navigation/native';
 import AuthNavigator from '../../navigation/AuthNavigator';
-import { useLazyGetProfileQuery } from '../../store/services/authApi';
 import MainTabNavigator from '../../navigation/MainTabNavigator';
+import { useLazyGetProfileQuery } from '../../store/services/profileApi';
 
 const MainAppContent = () => {
    const dispatch = useAppDispatch();
